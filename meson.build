@@ -9,9 +9,13 @@ project('sbpd', ['c'],
         'buildtype=debug'
     ],
     meson_version: '>= 0.41',
+
 )
 
-dep = dependency('libcurl libwiringpi')
+cc = meson.get_compiler('c')
+
+dep = dependency('libcurl')
+libwiringpi_dep = cc.find_library('wiringPi')
 
 sources = files('''
     sbpd.c
@@ -29,7 +33,10 @@ sources = files('''
 sbpd = executable(
     'sbpd',
     [sources],
-    dependency: [dep],
+    dependencies: [
+      dep,
+      libwiringpi_dep
+    ],
     install: true
 )
 
